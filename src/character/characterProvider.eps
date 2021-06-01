@@ -1,3 +1,10 @@
-function characterProvider() {
-    
+import character.character;
+
+function registerCharacter(name, unitID, skillID, description): {
+    const retObj = character.Character();
+    retObj.name = "";
+    retObj.unitID = unitID;
+    retObj.skillID = skillID;
+    retObj.description = description;
+    return retObj;
 }
