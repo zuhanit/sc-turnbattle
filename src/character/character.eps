@@ -1,18 +1,82 @@
+import skill.skill;
+import skill.explorer as explorerSkill;
+import skill.archer as archerSkill;
+import skill.knight as knightSkill;
+import skill.magician as magicianSkill;
+import skill.robot as robotSkill;
+import skill.witch as witchSkill;
+import skill.warrior as warriorSkill;
+
 object Character {
     var name;
     var unitID: TrgUnit;
-    var skillID;
+    var skillID: skill.Skill;
     var description;
+    var status;
+};
+
+const characterList = EUDArray(7);
+var characterCount = 0;
+
+function registerToArray(target) {
+    characterList[characterCount] = target;
+    characterCount++;
 }
 
-const Archer = Character();
-archer.name = "궁수";
-archer.unitID = $U("Terran Marine");
-archer.skillID = 0;
-archer.description = "설명설명";
+function registerCharacters() {
+    const archer = Character.alloc();
+    archer.name = EPD(Db("궁수"));
+    archer.unitID = $U("Terran Ghost");
+    archer.skillID = archerSkill.charSkillObject;
+    archer.description = EPD(Db("\t\x1F궁수\x04는 \x19긴 사정거리\x04를 이용해 적을 견제하는 캐릭터입니다.\n\t\x04체력이 낮으므로 적의 공격에 노출되지 않게 조심하세요."));
+    archer.status = EPD(Db("\t\x08♥ 체력 \x04낮음 \x1E| \x1F◎ 공격력 \x04중간 \x1E| \x07◈ 기술 의존도 \x04높음 \x1E| \x19▣ 이동속도 \x04낮음+"));
+    registerToArray(archer);
 
-const Magician = Character();
-magician.name = "마법사";
-magician.unitID = $U("Protoss High Templar");
-magician.skillID = 1;
-magician.description = "";
+    const magician = Character.alloc();
+    magician.name = EPD(Db("마법사"));
+    magician.unitID = $U("Protoss High Templar");
+    magician.skillID = magicianSkill.charSkillObject;
+    magician.description = EPD(Db("\t\x1F마법사\x04는 기본 공격을 할 수 없지만 \x19유용한 마법\x04을 사용합니다.\n\t\x04기술을 맞추는 게 가장 중요합니다."));
+    magician.status = EPD(Db("\t\x08♥ 체력 \x04낮음 \x1E| \x1F◎ 공격력 \x04공격불가 \x1E| \x07◈ 기술 의존도 \x04높음+ \x1E| \x19▣ 이동속도 \x04낮음-"));
+    registerToArray(magician);
+
+    const knight = Character.alloc();
+    knight.name = EPD(Db("기사"));
+    knight.unitID = $U("Protoss Dark Templar");
+    knight.skillID = knightSkill.charSkillObject;
+    knight.description = EPD(Db("\t\x1F기사\x04는 \x19근접전\x04에서 큰 위력을 발휘합니다.\n\t\x04하지만 이동 속도가 느리므로 항상 신중하게 움직여야 합니다."));
+    knight.status = EPD(Db("\t\x08♥ 체력 \x04높음 \x1E| \x1F◎ 공격력 \x04높음+ \x1E| \x07◈ 기술 의존도 \x04중간 \x1E| \x19▣ 이동속도 \x04낮음"));
+    registerToArray(knight);
+
+    const explorer = Character.alloc();
+    explorer.name = EPD(Db("탐험가"));
+    explorer.unitID = $U("Terran Marine");
+    explorer.skillID = explorerSkill.charSkillObject;
+    explorer.description = EPD(Db("\t\x1F탐험가\x04는 \x19아군을 지원\x04하는 캐릭터입니다.\n\t\x04자신 혼자서는 선택의 폭이 좁기에 협동이 중요합니다."));
+    explorer.status = EPD(Db("\t\x08♥ 체력 \x04중간 \x1E| \x1F◎ 공격력 \x04낮음 \x1E| \x07◈ 기술 의존도 \x04높음 \x1E| \x19▣ 이동속도 \x04중간+"));
+    registerToArray(explorer);
+
+    const warrior = Character.alloc();
+    warrior.name = EPD(Db("전사"));
+    warrior.unitID = $U("Protoss Zealot");
+    warrior.skillID = warriorSkill.charSkillObject;
+    warrior.description = EPD(Db("\t\x1F전사\x04는 \x19적에게 접근하기 좋은 기술\x04들을 다수 가지고 있습니다.\n\t\x04그렇지만 전사도 피가 닳면 죽으니 조심해야 합니다."));
+    warrior.status = EPD(Db("\t\x08♥ 체력 \x04높음 \x1E| \x1F◎ 공격력 \x04중간 \x1E| \x07◈ 기술 의존도 \x04중간 \x1E| \x19▣ 이동속도 \x04중간+"));
+    registerToArray(warrior);
+
+    const witch = Character.alloc();
+    witch.name = EPD(Db("부두술사"));
+    witch.unitID = $U("Zerg Hydralisk");
+    witch.skillID = witchSkill.charSkillObject;
+    witch.description = EPD(Db("\t\x1F부두술사\x04는 적에게 \x19저주\x04를 걸어 지속적으로 공격하는 캐릭터입니다.\n\t\x04저주가 효과를 발휘하기 위해서는 시간이 필요합니다."));
+    witch.status = EPD(Db("\t\x08♥ 체력 \x04중간+ \x1E| \x1F◎ 공격력 \x04낮음+ \x1E| \x07◈ 기술 의존도 \x04높음 \x1E| \x19▣ 이동속도 \x04중간"));
+    registerToArray(witch);
+
+    const robot = Character.alloc();
+    robot.name = EPD(Db("로봇"));
+    robot.unitID = $U("Terran Goliath");
+    robot.skillID = robotSkill.charSkillObject;
+    robot.description = EPD(Db("\t\x1F로봇\x04은 음음\n\t\x04별로 정한게 없는걸"));
+    robot.status = EPD(Db("\t\x08♥ 체력 \x04중간+ \x1E| \x1F◎ 공격력 \x04낮음+ \x1E| \x07◈ 기술 의존도 \x04높음 \x1E| \x19▣ 이동속도 \x04중간"));
+    registerToArray(robot);
+}

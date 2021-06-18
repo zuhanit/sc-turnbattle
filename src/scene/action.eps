@@ -1,0 +1,42 @@
+import player.player;
+import tools.requirement;
+
+const sb = StringBuffer();
+const playerStatus = EUDArray(6);
+
+function abs(num) {
+    if(num >= 0x80000000) {  // 음수
+        num = -num;
+    }
+    return num;
+}
+
+function main() {
+    foreach(h : EUDLoopPlayer("Human")) {
+        setcurpl(h);
+        sb.insert(0);
+        sb.append("\t\x04\x19[행동 선택 턴] \x04캐릭터를 선택해 행동을 선택해주세요. \x1e\x12아직 턴을 마치지 못한 플레이어 ▼\n\t\x1E~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\x12");
+        foreach(checkPlayer : EUDLoopPlayer("Human")) {
+            if (playerStatus[h] == 0) {
+                sb.appendf("{:c}■", checkPlayer);
+            }
+        }
+        sb.DisplayAt(0);
+        const playerObj = player.Player.cast(player.players[h]);
+        if (MemoryXEPD(playerObj.epd + 0x4D/4, Exactly, 122*256, 0xFF00)) {
+            DisplayText("OK");
+            const unitX, unitY = posread_epd(playerObj.epd + 0x28/4);
+            var targetX, targetY = posread_epd(playerObj.epd + 0x58/4);
+            const dx, dy = targetX - unitX, targetY - unitY;
+            const deg = atan2(dx, dy);
+            const y, x = lengthdir(5*32, deg);
+            if (abs(dx) > x || abs(dy) > y) {
+                targetX = unitX + x;
+                targetY = unitY + y;
+            }
+            setloc("effectLoc", targetX, targetY);
+            CreateUnit(1, "Zerg Beacon", "effectLoc", CurrentPlayer);
+            SetMemoryXEPD(playerObj.epd + 0x4D/4, SetTo, 1*256, 0xFF00);
+        }
+    }
+}

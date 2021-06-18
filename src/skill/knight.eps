@@ -1,0 +1,58 @@
+import skill.skill;
+import skill.detail;
+
+var charSkillObject = 0;
+
+function registerSkills() {
+    const skill = skill.Skill.alloc();
+
+    const qDetail = detail.Detail.alloc();
+    qDetail.name = EPD(Db("베기"));
+    qDetail.mp = 1;
+    qDetail.description = EPD(Db("자신 기준 2X2칸 내의 적에게 20의 피해를 입힙니다."));
+
+    const wDetail = detail.Detail.alloc();
+    wDetail.name = EPD(Db("왕가의 방패"));
+    wDetail.mp = 1;
+    wDetail.description = EPD(Db("1턴간 쉴드를 30 획득합니다."));
+
+    const eDetail = detail.Detail.alloc();
+    eDetail.name = EPD(Db("기절"));
+    eDetail.mp = 3;
+    eDetail.description = EPD(Db("지정한 적을 1턴간 \x19기절\x04시킵니다."));
+
+    const rDetail = detail.Detail.alloc();
+    rDetail.name = EPD(Db("거합베기"));
+    rDetail.mp = 2;
+    rDetail.description = EPD(Db("1초간 정신을 집중한 뒤 지정한 적에게 달려들어 \x1170의 피해\x04를 입힙니다."));
+
+    skill.q = qDetail;
+    skill.w = wDetail;
+    skill.e = eDetail;
+    skill.r = rDetail;
+
+    charSkillObject = skill;
+}
+
+/*
+const charInfoText = [
+Db("\t\x17탐험가\n\t\t\x04전체적으로 데미지가 낮지만 아군에게 큰 도움이 되는 캐릭터\n\t\t\x04함정을 설치하고 느리게 하여 아군 기술의 효율성을 크게 높여준다.\n\t\t\x04그러나 혼자서는 할 수 있는 것이 적으므로 항상 아군과 함께해야 한다."),
+Db("\t\x17궁수\n\t\t\x04긴 사정거리를 이용해 적을 견제하는 캐릭터\n\t\t\x04후방에 위치해 아군의 공격을 지원할 수 있다.\n\t\t\x04하지만 체력이 낮은 것이 단점."),
+Db("\t\x17부두술사\n\t\t\x04적에게 저주를 걸어 지속적으로 공격하는 캐릭터.\n\t\t\x04다만 효과를 발휘하기 위해선 시간이 필요하다.\n\t\t\x04기술 위주 캐릭터지만 어느정도 선두에 서는 것을 추천."),
+Db("\t\x17검사\n\t\t\x04근접전에서 가장 강력한 캐릭터.\n\t\t\x04그러나 이동 속도가 조금 느려 근접하기가 어렵다. \n\t\t\x04뒤를 돌거나 아군의 지원을 받는다면 큰 역할을 해낼수 있다."),
+Db("\t\x17질럿\n\t\t\x04적에게 근접해서 공격하는 캐릭터\n\t\t\x04또한 체력이 높아 전선의 선두에 설 수 있다.\n\t\t\x04다만 혼자 진입한다면 적의 공격에 속수무책으로 당할 것이다."),
+Db("\t\x17마법사\n\t\t\x04기본 공격을 할 수 없지만 유용한 마법을 사용하는 캐릭터\n\t\t\x04이동 속도가 느리고 체력이 낮으므로 접근전은 위험하다.\n\t\t\x04또한 적을 맞추지 못한다면 마법이 무용지물이 되므로 신중해야 한다.")
+];
+ */
+
+/*
+const skillText = [
+    Db("\t\x19사용할 기술을 선택해주세요!\n\t\t\x1BTP 1\t\x04둔화 덫\t\t\t\x16… 밟으면 2턴간 느려지는 덫 설치\n\t\t\x1BTP 1\t\x04지뢰 설치\t\t\t\x16… 데미지 20의 지뢰 설치\n\t\t\x1BTP 2\t\x04응급치료\t\t\t\x16… 체력 15 회복\n\t\t\x1BTP 3\t\x04올가미 투척\t\t\x16… 맞으면 2턴간 느려지는 올가미 투척\n\t\t\x1BTP 4\t\x04자연과의 동화\t\t\t\t\x16… 1턴간 은신. 가까이 올 경우 발각"),
+    Db("\t\x19사용할 기술을 선택해주세요!\n\t\t\x1BTP 0\t\x04침착\t\t\t\t\x16… 적을 잡으면 TP 3 상승\n\t\t\x1BTP 1\t\x04활쏘기\t\t\t\t\x16… 데미지 20의 화살 발사. 사용 후 스킬 사용 가능\n\t\t\x1BTP 1\t\x04집중 사격\t\t\t\x16… 대상에게 데미지 30의 빗나가지 않는 화살 발사.\n\t\t\x1BTP 2\t\x04심호흡\t\t\t\t\x16… 1턴 뒤 TP 3 획득\n\t\t\x1BTP 3\t\x04작살\t\t\t\t\x16… 맞을 경우 1턴간 기절하는 화살 발사"),
+    Db("\t\x19사용할 기술을 선택해주세요!\n\t\t\x1BTP 1\t\x04독약 투척\t\t\t\x16… 2턴간 지정한 위치에서 20의 피해를 입히는 독약을 투척.\n\t\t\x1BTP 1\t\x04암흑의 꽃\t\t\t\x16… 1초마다 5의 피해를 입히는 암흑의 꽃 설치\n\t\t\x1BTP 2\t\x04저주\t\t\t\t\x16… 지정한 적에게 1턴마다 피해를 10씩 입히는 저주를 검. 2턴간 유지된다.\n\t\t\x1BTP 2\t\x04어두운 가면\t\t\x16… 어둠어둠\n\t\t\x1BTP 3\t\x04고대의 문\t\t\t\x16… 지정한 위치로 이동하게 해주는 고대의 문 설치"),
+    Db("\t\x19사용할 기술을 선택해주세요!\n\t\t\x1BTP 1\t\x04베기\t\t\t\t\x16… 2X2칸 내의 적에게 30의 피해를 입힘\n\t\t\x1BTP 1\t\x04막기\t\t\t\t\x16… 1턴간 쉴드 30 획득. 사용 후 다른 스킬 사용 가능.\n\t\t\x1BTP 2\t\x04단검 투척\t\t\t\x16… 지정한 위치에 데미지 20의 단검 3개 투척\n\t\t\x1BTP 2\t\x04왕가의 깃발\t\t\x16… 1턴마다 범위 내 아군을 10씩 치유하는 깃발 설치. 2턴간 유지된다.\n\t\t\x1BTP 3\t\x04거합베기\t\t\t\x16… 지정한 적에게 70의 피해를 입힘"),
+    Db("\t\x19사용할 기술을 선택해주세요!\n\t\t\x1BTP 0\t\x04명예로운 전투\t\t\x16… 적을 잡으면 체력 30 회복. 패시브\n\t\t\x1BTP 1\t\x04주먹질\t\t\t\t\x16… 대상 적에게 30의 피해\n\t\t\x1BTP 1\t\x04마음가짐\t\t\t\x16… 1턴동안 방어력 3 상승\n\t\t\x1BTP 2\t\x04달려들기\t\t\t\x16… 지정한 위치로 돌진 후 가까이 있는 적을 공격\n\t\t\x1BTP 3\t\x04강력한 한 방\t\t\x16… 대상 적에게 30의 피해를 주고 1턴간 기절시킴"),
+    Db("\t\x19사용할 기술을 선택해주세요!\n\t\t\x1BTP 1\t\x04마법 화살\t\t\t\x16… 데미지 30의 화살 발사\n\t\t\x1BTP 1\t\x04얼음송이\t\t\t\x16… 적을 둔화시키는 영역 생성\n\t\t\x1BTP 2\t\x04파이어볼\t\t\t\x16… 데미지 60의 화염구 발사\n\t\t\x1BTP 3\t\x04마법의 보호막\t\t\x16… 50의 피해를 막아주는 보호막 사용\n\t\t\x1BTP 4\t\x04메테오\t\t\t\t\x16… 데미지 70의 거대 유성 소환. 1턴 뒤 효과 발생")
+];
+
+ */

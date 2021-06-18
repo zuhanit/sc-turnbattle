@@ -1,0 +1,25 @@
+function onVision() {
+    foreach(h : EUDLoopPlayer("Human", Force1)) {
+        setcurpl(h);
+        RunAIScript("Turn ON Shared Vision for Player 7");
+    }
+    foreach(h : EUDLoopPlayer("Human", Force3)) {
+        setcurpl(h);
+        RunAIScript("Turn ON Shared Vision for Player 8");
+    }
+    MoveUnit(All, "Map Revealer", P7, "Anywhere", "freeze");
+    MoveUnit(All, "Map Revealer", P8, "Anywhere", "freeze");
+}
+
+function offVision() {
+    foreach(h : EUDLoopPlayer("Human", Force1)) {
+        setcurpl(h);
+        RunAIScript("Turn OFF Shared Vision for Player 7");
+    }
+    foreach(h : EUDLoopPlayer("Human", Force3)) {
+        setcurpl(h);
+        RunAIScript("Turn OFF Shared Vision for Player 8");
+    }
+    MoveUnit(All, "Map Revealer", P7, "Anywhere", "freeze");
+    MoveUnit(All, "Map Revealer", P8, "Anywhere", "freeze");
+}

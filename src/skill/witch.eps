@@ -1,0 +1,35 @@
+import skill.skill;
+import skill.detail;
+
+var charSkillObject = 0;
+
+function registerSkills() {
+    const skill = skill.Skill.alloc();
+
+    const qDetail = detail.Detail.alloc();
+    qDetail.name = EPD(Db("집중 공격"));
+    qDetail.mp = 2;
+    qDetail.description = EPD(Db("궁수의 3번째 기본 공격은 \x1110의 추가 피해\x04를 입힙니다."));
+
+    const wDetail = detail.Detail.alloc();
+    wDetail.name = EPD(Db("화살"));
+    wDetail.mp = 1;
+    wDetail.description = EPD(Db("\x1110의 피해\x04를 입히는 화살을 발사합니다."));
+
+    const eDetail = detail.Detail.alloc();
+    eDetail.name = EPD(Db("기절"));
+    eDetail.mp = 1;
+    eDetail.description = EPD(Db("1턴간 턴 포인트를 \x1f3\0x04만큼 얻습니다. 다음 턴 궁수는 기절 상태에 빠집니다."));
+
+    const rDetail = detail.Detail.alloc();
+    rDetail.name = EPD(Db("거합베기"));
+    rDetail.mp = 2;
+    rDetail.description = EPD(Db("궁수가 속박의 화살을 발사해 맞은 적을 3초간 \x19속박\x04시킵니다."));
+
+    skill.q = qDetail;
+    skill.w = wDetail;
+    skill.e = eDetail;
+    skill.r = rDetail;
+
+    charSkillObject = skill;
+}

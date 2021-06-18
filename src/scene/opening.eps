@@ -1,0 +1,43 @@
+import tools.effect;
+import character.character;
+import scene.sceneManager as sm;
+import system.vision;
+import tools.CUnit;
+
+const OPENING_TIME = 24;
+const ptrs = EUDArray(50);
+var timer;
+
+function initializeUnit() {
+    for (var k = 0; k < character.characterList.length; k++) {
+        const charObject = character.Character.cast(character.characterList[k]);
+        MoveLocation("effectLoc", charObject.unitID, P12, "Anywhere");
+        RemoveUnit(charObject.unitID, P12);
+        ptrs[k] = CUnit.nextUnitPtr();
+        CreateUnit(1, charObject.unitID, "effectLoc", P8);
+        effect.effect("Spider Mine Death", "effectLoc", "scan");
+        effect.effect("Recall", "effectLoc", "scan");
+    }
+    GiveUnits(All, "(men)", P8, "Anywhere", P12);
+}
+
+function main() {
+    timer++;
+
+    foreach(h : EUDLoopPlayer("Human")) {
+        setcurpl(h);
+        if (timer == OPENING_TIME + 1) {DisplayText("\n\n\n\n\x13\x05T U R N B A T T L E\n\x13\x05초원의 대전투\n\n\n\n\n"); PlayWAV("staredit\\wav\\Pzzan.wav");}
+        if (timer == OPENING_TIME + 2) {DisplayText("\n\n\n\n\x13\x1eT U R N B A T T L E\n\x13\x1e초원의 대전투\n\n\n\n\n");}
+        if (timer == OPENING_TIME + 3) {DisplayText("\n\n\n\n\x13\x01T U R N B A T T L E\n\x13\x02초원의 대전투\n\n\n\n\n");}
+        if (timer == OPENING_TIME + 4) {DisplayText("\n\n\n\n\x13\x04T U R N B A T T L E\n\x13\x04초원의 대전투\n\n\n\n\n");}
+        if (timer >= OPENING_TIME + 5 && timer <= OPENING_TIME + 29) {DisplayText("\n\n\n\n\x13\x04T U R N B A T T L E\n\x13\x19초원의 대전투\n\n\n\n\n");}
+        if (timer == OPENING_TIME + 30) {DisplayText("\n\n\n\n\x13\x04T U R N B A T T L E\n\x13\x04초원의 대전투\n\n\n\n\n");}
+        if (timer == OPENING_TIME + 31) {DisplayText("\n\n\n\n\x13\x01T U R N B A T T L E\n\x13\x02초원의 대전투\n\n\n\n\n");}
+        if (timer == OPENING_TIME + 32) {DisplayText("\n\n\n\n\x13\x1eT U R N B A T T L E\n\x13\x1e초원의 대전투\n\n\n\n\n");}
+        if (timer == OPENING_TIME + 33) {DisplayText("\n\n\n\n\x13\x05T U R N B A T T L E\n\x13\x05초원의 대전투\n\n\n\n\n");}
+        if (timer >= OPENING_TIME + 34 && timer <= OPENING_TIME + 60) {DisplayText("\n\n\n\n\n\n\n\n\n\n\n");}
+    }
+
+    if (timer == OPENING_TIME + 61) {vision.onVision();}
+    if (timer == OPENING_TIME + 79) {initializeUnit(); sm.nextScene();}
+}

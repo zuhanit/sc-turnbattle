@@ -1,0 +1,30 @@
+function setResearch(tech, player, value) { // Broodwar
+    var mask;
+    var addr;
+    if (tech < 24) {  
+        addr = 0x58CF44 + tech + (24*player);
+    } else {
+        addr = 0x58F140 + (tech - 24) + (20*player);
+    }
+    switch (addr % 4) {
+        case 0:
+            mask = 0xFF;
+            break;
+
+        case 1:
+            mask = 0xFF00;
+            value = value*256;
+            break;
+
+        case 2:
+            mask = 0xFF0000;
+            value = value*65536;
+            break;
+
+        case 3:
+            mask = 0xFF000000;
+            value = value*16777216;
+            break;
+    }
+    SetMemoryX(addr, SetTo, value, mask);
+}

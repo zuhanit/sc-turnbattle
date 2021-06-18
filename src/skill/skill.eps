@@ -1,8 +1,25 @@
-import detail.Detail;
+import skill.detail.Detail;
+import skill.explorer;
+import skill.archer;
+import skill.magician;
+import skill.warrior;
+import skill.knight;
+import skill.robot;
+import skill.witch;
 
 object Skill {
     var q: Detail;
     var w: Detail;
     var e: Detail;
     var r: Detail;
+};
+
+function batchRegister() {
+    explorer.registerSkills();
+    archer.registerSkills();
+    magician.registerSkills();
+    warrior.registerSkills();
+    knight.registerSkills();
+    robot.registerSkills();
+    witch.registerSkills();
 }

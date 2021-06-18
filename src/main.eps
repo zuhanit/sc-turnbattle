@@ -1,0 +1,14 @@
+import character.character;
+import skill.skill;
+import scene.sceneManager;
+import player.player;
+
+function onPluginStart() {
+    skill.batchRegister();
+    character.registerCharacters();
+    player.initialize();
+}
+
+function afterTriggerExec() {
+    sceneManager.sceneLoop();
+}

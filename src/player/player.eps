@@ -1,6 +1,15 @@
 object Player {
-    var character: number;
-    var hp: number;
-    var mp: number;
+    var character;
+    var hp;
+    var mp;
     var epd;
+};
+
+const players = EUDArray(6);
+
+function initialize() {
+    for (var p = 0; p < 6; p++) {
+        const pObj = Player.alloc();
+        players[p] = pObj;
+    }
 }

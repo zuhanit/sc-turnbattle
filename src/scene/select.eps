@@ -1,0 +1,88 @@
+
+import character.character;
+import player.player;
+import tools.effect;
+import scene.sceneManager as sm;
+import scene.opening;
+import skill.skill;
+import skill.detail;
+
+const clickedArray = EUDArray(6);
+const isSelected = EUDArray(6);
+const sb = StringBuffer();
+var existBuffer = 0;
+var playerCount;
+function displayCharacterDesc(p);
+
+function main() {
+    playerCount = 0;
+    foreach(playerIndex : EUDLoopPlayer("Human")) {
+        playerCount++;
+        setcurpl(playerIndex);
+        sb.print(playerIndex);
+        if (isSelected[playerIndex] == 0) {
+            sb.insert(0);
+            sb.append("\t\x11※ \x04한 번 클릭해 \x19설명을 보고, \x04다시 클릭해 \x1B파트너를 선택\x04할 수 있답니다.\x12\x1e아직 선택하지 못한 플레이어 ▼\n\t\x1e~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\x12");
+            foreach(checkPlayer : EUDLoopPlayer("Human")) {
+                if (playerexist(checkPlayer) && isSelected[checkPlayer] == 0) {
+                    sb.appendf("{:c}■", checkPlayer);
+                }
+            }
+            sb.append("\n");
+            displayCharacterDesc(playerIndex);
+            if(clickedArray[playerIndex] > 0) { // CAN I USE ANY METHOD TO REPLACE CAST?
+                const charObj = character.Character.cast(character.characterList[clickedArray[playerIndex] - 1]);
+                const k = skill.Skill.cast(charObj.skillID);
+                const qObj = detail.Detail.cast(k.q);
+                const wObj = detail.Detail.cast(k.w);
+                const eObj = detail.Detail.cast(k.e);
+                const rObj = detail.Detail.cast(k.r);
+                sb.appendf("{:t}\n\n{:t}\n", charObj.description, charObj.status);
+                sb.appendf("\t\x18(\x07Q\x18) \x04{:t} \x1e턴 포인트 {} 사용\n", qObj.description, qObj.mp);
+                sb.appendf("\t\x18(\x07W\x18) \x04{:t} \x1e턴 포인트 {} 사용\n", wObj.description, wObj.mp);
+                sb.appendf("\t\x18(\x07E\x18) \x04{:t} \x1e턴 포인트 {} 사용\n", eObj.description, eObj.mp);
+                sb.appendf("\t\x18(\x07R\x18) \x04{:t} \x1e턴 포인트 {} 사용\n", rObj.description, rObj.mp);
+            }
+            sb.DisplayAt(0);
+        } else {
+            const playerObj = player.Player.cast(player.players[playerIndex]);
+            const charObj = character.Character.cast(character.characterList[playerObj.character]);
+            sb.printf("\n\n\n\n\n\x13\x19{:t}\x04을(를) 선택하셨습니다!\n\n\n\n\n", charObj.name);
+        }
+    }
+    if (playerCount <= existBuffer) {
+        foreach(h : EUDLoopPlayer("Human")) {
+            setcurpl(h);
+            sb.print("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        }
+        sm.nextScene();
+    }
+}
+
+function displayCharacterDesc(p) {
+    for (var index = 1; index < character.characterList.length + 1; index++) {
+        if (MemoryEPD(EPD(0x6284E8) + 12 * p, Exactly, opening.ptrs[index-1])) {
+            if (clickedArray[p] != index) {
+                const charObj = character.Character.cast(character.characterList[index-1]);
+                MoveLocation("effectLoc", charObj.unitID, P12, "Anywhere");
+                effect.effect("Carrier", "effectLoc", "burrowed");
+                GiveUnits(1, charObj.unitID, P12, "Anywhere", P11);
+                GiveUnits(1, charObj.unitID, P11, "Anywhere", P12);
+                clickedArray[p] = index;
+            } else {
+                const charObj = character.Character.cast(character.characterList[index-1]);
+                const playerObj = player.Player.cast(player.players[p]);
+                MoveLocation("effectLoc", charObj.unitID, P12, "Anywhere");
+                effect.effect("Recall", "effectLoc", "scan");
+                GiveUnits(1, charObj.unitID, P12, "Anywhere", p);
+                SetInvincibility(Enable, charObj.unitID, p, "Anywhere");
+                playerObj.character = index - 1;
+                playerObj.epd = EPD(opening.ptrs[index-1]);
+                SetMemoryXEPD(playerObj.epd + 0x98/4, SetTo, 0, 0xFFFF);
+                //SetMemoryXEPD(playerObj.epd + 0xDC/4, SetTo, 0x400, 0x400);
+                isSelected[p] = 1;
+                existBuffer++;
+            }
+        }
+    }
+}

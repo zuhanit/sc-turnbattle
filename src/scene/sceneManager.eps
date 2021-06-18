@@ -1,0 +1,36 @@
+// opening - select - action - battle
+
+import scene.action;
+import scene.opening;
+import scene.select;
+import scene.selectEnd;
+import scene.battle;
+
+var currentScene;
+
+function sceneLoop() {
+    if (currentScene == 0) {
+        opening.main();
+    }
+    if (currentScene == 1) {
+        select.main();
+    }
+    if (currentScene == 2) {
+        selectEnd.main();
+    }
+    if (currentScene == 3) {
+        action.main();
+    }
+    if (currentScene == 4) {
+        battle.main();
+    }
+}
+
+function nextScene() {
+    if (currentScene < 4) {
+        currentScene++;
+    }
+    if (currentScene == 4) {
+        currentScene--;
+    }
+}

@@ -1,0 +1,60 @@
+import character.character;
+import tools.effect;
+import scene.sceneManager as sm;
+
+function batchRemoveUnit() {
+    for (var k = 0; k < character.characterList.length; k++) {
+        const charObject = character.Character.cast(character.characterList[k]);
+        if (Command(P12, AtLeast, 1, charObject.unitID)) { 
+            MoveLocation("effectLoc", charObject.unitID, P12, "Anywhere");
+            RemoveUnit(charObject.unitID, P12);
+            effect.effect("Hallucination Hit", "effectLoc", "scan");
+            effect.effect("Recall", "effectLoc", "scan");
+        }
+    }
+}
+
+function main() {
+    var timer;
+    if (timer < 24) {timer++;}
+    if (timer == 1) {batchRemoveUnit();}
+    if (timer == 12) {
+        foreach(playerIndex : EUDLoopPlayer("Human", Force1)) {
+            setcurpl(playerIndex);
+            CenterView("p2");
+        }
+        foreach(playerIndex : EUDLoopPlayer("Human", Force3)) {
+            setcurpl(playerIndex);
+            CenterView("p5");
+        }
+    }
+    if (timer == 16) {
+        effect.effect("Kakaru", "p1", "air");
+        effect.effect("Kakaru", "p4", "air");
+        effect.effect("Bengalaas", "p1", "ground");
+        effect.effect("Bengalaas", "p4", "ground");
+    }
+    if (timer == 17) {
+        MoveUnit(All, "(men)", P1, "Anywhere", "p1");
+        MoveUnit(All, "(men)", P4, "Anywhere", "p4");
+        effect.effect("Kakaru", "p2", "air");
+        effect.effect("Kakaru", "p5", "air");
+        effect.effect("Bengalaas", "p2", "ground");
+        effect.effect("Bengalaas", "p5", "ground");
+    }
+    if (timer == 18) {
+        MoveUnit(All, "(men)", P2, "Anywhere", "p2");
+        MoveUnit(All, "(men)", P5, "Anywhere", "p5");
+        effect.effect("Kakaru", "p3", "air");
+        effect.effect("Kakaru", "p6", "air");
+        effect.effect("Bengalaas", "p3", "ground");
+        effect.effect("Bengalaas", "p6", "ground");
+    }
+    if (timer == 19) {
+        MoveUnit(All, "(men)", P3, "Anywhere", "p3");
+        MoveUnit(All, "(men)", P6, "Anywhere", "p6");
+    }
+    if (timer == 24) {
+        sm.nextScene();
+    }
+}
