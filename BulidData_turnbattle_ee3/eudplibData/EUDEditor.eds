@@ -1,14 +1,13 @@
 [main]
 input: ..\..\source_map.scx
 output: ..\..\output.scx
-[DataEditor.py]
+debug: 1
 [eudTurbo]
+[DataEditor.py]
 [ExtraDataEditor.py]
 [dataDumper]
 ..\temp\custom_txt.tbl : 0x6D5A30, copy
 
-[C:\Users\zuhan\Documents\Starcraft\Maps\sc-turnbattle\src\main.eps]
-[TriggerEditor\main.eps]
 
 
 [chatEvent]
@@ -18,4 +17,5 @@ __patternAddr__ : 0x58D908
 __lenAddr__ : 0x58D90C
 
 
+[C:\Users\zuhan\Documents\Starcraft\Maps\sc-turnbattle\src\main.eps]
 

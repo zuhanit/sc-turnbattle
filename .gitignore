@@ -1,4 +1,12 @@
-
+# EE3
 BulidData_turnbattle_ee3
+
+# Map Files
+output.scx
+output.scx.epmap
+output.scx.epmap.prof
+turnbattle_ee3.e3s
+.vscode
+# EPSCRIPT COMPILE
 __epspy__
 __pycache__

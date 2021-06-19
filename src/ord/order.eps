@@ -1,0 +1,21 @@
+import system.pos;
+
+object Action {
+    var type;
+    var charPos: pos.Pos;
+    var orderPos: pos.Pos;
+    var targetPtr;
+    var skillFuncPtr;
+    var next;
+    var prev;
+};
+
+function newAction(): Action {
+    const actionObject = Action.alloc();
+    actionObject.type = 0;
+    actionObject.charPos = 0;
+    actionObject.orderPos = 0;
+    actionObject.targetPtr = 0;
+    actionObject.skillFuncPtr = 0;
+    return actionObject;
+}

@@ -1,0 +1,11 @@
+function isWalkable(loc: TrgLocation, player: TrgPlayer) {
+    CreateUnit(1, "Zerg Zergling", "wait", player);
+    MoveUnit(1, "Zerg Zergling", player, "wait", loc);
+    if (Bring(player, AtLeast, 1, "Zerg Zergling", loc)) {
+        RemoveUnit("Zerg Zergling", player);
+        return true;
+    } else {
+        RemoveUnit("Zerg Zergling", player);
+        return false;
+    }
+}

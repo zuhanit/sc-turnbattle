@@ -1,3 +1,24 @@
+import player_folder.player;
+import ord.order;
+import character.character;
+import system.pos;
+
 function main() {
-    
+    foreach(h : EUDLoopPlayer("Human")) {
+        const playerObj = player.Player.cast(player.players[h]);
+        const characterObj = character.Character.cast(character.characterList[playerObj.character]);
+        const currentOrder = order.Action.cast(playerObj.firstAction);
+        if(currentOrder.type) {
+        }
+        if (currentOrder.type == 1) {
+            const orderPos = pos.Pos.cast(currentOrder.orderPos);
+            const x, y = orderPos.x, orderPos.y;
+            setloc("effectLoc", x, y);
+            MoveLocation($L("p1OrderLoc") + h, "Zerg Mutalisk", P12, "effectLoc");
+            Order(characterObj.unitID, h, "Anywhere", Move,"effectLoc");
+            if (Bring(h, AtLeast, 1, characterObj.unitID, $L("p1OrderLoc") + h)) {
+                //currentOrder = order.Action.cast(currentOrder.next);
+            }
+        }
+    }
 }

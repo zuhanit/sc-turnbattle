@@ -1,8 +1,16 @@
-import player.player;
+import player_folder.player;
 import tools.requirement;
+import tools.walkable;
+import scene.sceneManager as sm;
+import ord.order;
+import ord.link;
+import system.pos;
 
 const sb = StringBuffer();
 const playerStatus = EUDArray(6);
+const confirm = EUDArray(6);
+var existPlayer;
+var turnEndPlayer;
 
 function abs(num) {
     if(num >= 0x80000000) {  // 음수
@@ -12,31 +20,83 @@ function abs(num) {
 }
 
 function main() {
+    existPlayer = 0;
     foreach(h : EUDLoopPlayer("Human")) {
+        existPlayer++;
         setcurpl(h);
         sb.insert(0);
-        sb.append("\t\x04\x19[행동 선택 턴] \x04캐릭터를 선택해 행동을 선택해주세요. \x1e\x12아직 턴을 마치지 못한 플레이어 ▼\n\t\x1E~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\x12");
+        if (playerStatus[h] == 0) {
+            sb.append("\t\x04\x19[행동 선택 턴] \x04캐릭터를 선택해 행동을 선택해주세요.");
+        } else {
+            sb.append("\t\x04\x1f[턴 종료!] \x04다른 플레이어가 턴을 마치기를 기다려주세요.");
+        }
+        sb.append("\x1e\x12아직 턴을 마치지 못한 플레이어 ▼\n\t\x1E~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\x12");
         foreach(checkPlayer : EUDLoopPlayer("Human")) {
             if (playerStatus[h] == 0) {
                 sb.appendf("{:c}■", checkPlayer);
             }
         }
+        sb.append();
         sb.DisplayAt(0);
-        const playerObj = player.Player.cast(player.players[h]);
-        if (MemoryXEPD(playerObj.epd + 0x4D/4, Exactly, 122*256, 0xFF00)) {
-            DisplayText("OK");
-            const unitX, unitY = posread_epd(playerObj.epd + 0x28/4);
-            var targetX, targetY = posread_epd(playerObj.epd + 0x58/4);
-            const dx, dy = targetX - unitX, targetY - unitY;
-            const deg = atan2(dx, dy);
-            const y, x = lengthdir(5*32, deg);
-            if (abs(dx) > x || abs(dy) > y) {
-                targetX = unitX + x;
-                targetY = unitY + y;
+
+        if (playerStatus[h] == 0) {
+            const playerObj = player.Player.cast(player.players[h]);
+            const k = maskread_epd(playerObj.epd + 0x4D/4, 0xFF00);
+            eprintln(k);
+            if (confirm[h] == 0) {
+                if (MemoryXEPD(playerObj.epd + 0x4D/4, Exactly, 122*256, 0xFF00)) { // MOVE
+                    SetMemoryXEPD(playerObj.epd + 0x4D/4, SetTo, 1*256, 0xFF00);
+                    DisplayText("OK");
+                    const unitX, unitY = posread_epd(playerObj.epd + 0x28/4);
+                    var targetX, targetY = posread_epd(playerObj.epd + 0x58/4);
+                    const dx, dy = targetX - unitX, targetY - unitY;
+                    const deg = atan2(dx, dy);
+                    const y, x = lengthdir(5*32, deg);
+                    if (abs(dx) > abs(x) || abs(dy) > abs(y)) {
+                        targetX = unitX + x;
+                        targetY = unitY + y;
+                    }
+                    setloc("effectLoc", targetX, targetY);
+                    if (walkable.isWalkable("effectLoc", h)) {
+                        CreateUnit(1, "Zerg Beacon", "effectLoc", CurrentPlayer);
+                        const action = order.newAction();
+                        const characterPos = pos.Pos.alloc();
+                        characterPos.x = unitX;
+                        characterPos.y = unitY;
+                        const orderPos = pos.Pos.alloc();
+                        orderPos.x = targetX;
+                        orderPos.y = targetY;
+                        action.type = 1;
+                        action.charPos = characterPos;
+                        action.orderPos = orderPos;
+                        link.link(action, h);
+                    } else {
+                        DisplayText("\x13\x04움직일 수 없는 장소입니다.");
+                    }
+                }
+                if (MemoryXEPD(playerObj.epd + 0x4D/4, Exactly, 50*256, 0xFF00)) { // SKIP
+                    SetMemoryXEPD(playerObj.epd + 0x4D/4, SetTo, 1*256, 0xFF00);
+                    confirm[h] = 1;
+                }
             }
-            setloc("effectLoc", targetX, targetY);
-            CreateUnit(1, "Zerg Beacon", "effectLoc", CurrentPlayer);
-            SetMemoryXEPD(playerObj.epd + 0x4D/4, SetTo, 1*256, 0xFF00);
+            if (confirm[h] == 1) {
+                DisplayTextAt(2, "\x12\x11■\x04 턴을 종료하시겠습니까?\n\x12\x04종료를 원한다면 \x19턴 종료 버튼\x04을 다시 눌러주세요");
+                if (MemoryXEPD(playerObj.epd + 0x4D/4, Exactly, 50*256, 0xFF00)) {
+                    SetMemoryXEPD(playerObj.epd + 0x4D/4, SetTo, 1*256, 0xFF00);
+                    DisplayTextAt(2, "\n\n");
+                    confirm[h] = 10000;
+                    playerStatus[h] = 1;
+                    turnEndPlayer++;
+                }
+                if (MemoryXEPD(playerObj.epd + 0x4D/4, Exactly, 58*256, 0xFF00)) {
+                    SetMemoryXEPD(playerObj.epd + 0x4D/4, SetTo, 1*256, 0xFF00);
+                    DisplayTextAt(2, "\n\n");
+                    confirm[h] = 0;
+                }
+            }
         }
+    }
+    if (existPlayer <= turnEndPlayer) {
+        sm.nextScene();
     }
 }

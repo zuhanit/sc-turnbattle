@@ -4,6 +4,7 @@
 def onPluginStart():
     DoActions([  # Basic DatFile Actions
         SetMemory(0x6645B4, Add, -100663296),# units:Graphics  index:191    from 43 To 37
+        SetMemory(0x6645B8, Add, 262144),# units:Graphics  index:194    from 122 To 126
         SetMemory(0x6606AC, Add, 536870912),# units:Unit Direction  index:191    from 0 To 32
         SetMemory(0x66486C, Add, 16777216),# units:Shield Enable  index:191    from 0 To 1
         SetMemory(0x660F7C, Add, 3276800),# units:Shield Amount  index:191    from 100 To 150
@@ -28,11 +29,14 @@ def onPluginStart():
         SetMemory(0x660234, Add, -50331648),# units:AI Internal  index:191    from 3 To 0
         SetMemory(0x664174, Add, -4194304),# units:Special Ability Flags  index:61    from 406913024 To 402718720
         SetMemory(0x66437C, Add, 975175683),# units:Special Ability Flags  index:191    from 536870913 To 1512046596
+        SetMemory(0x664388, Add, 3),# units:Special Ability Flags  index:194    from 536870913 To 536870916
+        SetMemory(0x6643DC, Add, 256),# units:Special Ability Flags  index:215    from 536872960 To 536873216
         SetMemory(0x662E74, Add, 83886080),# units:Target Acquisition Range  index:191    from 0 To 5
         SetMemory(0x6632F4, Add, 16777216),# units:Sight Range  index:191    from 8 To 9
         SetMemory(0x66368C, Add, -905969664),# units:Armor Upgrade  index:191    from 60 To 6
         SetMemory(0x66223C, Add, 50331648),# units:Unit Size  index:191    from 0 To 3
         SetMemory(0x65FF84, Add, 16777216),# units:Armor  index:191    from 0 To 1
+        SetMemory(0x662098, Add, 5),# units:Right-click Action  index:0    from 1 To 6
         SetMemory(0x662154, Add, 16777216),# units:Right-click Action  index:191    from 0 To 1
         SetMemory(0x66012C, Add, 35651584),# units:What Sound Start  index:191    from 15 To 559
         SetMemory(0x66014C, Add, -2),# units:What Sound Start  index:206    from 26 To 24
@@ -72,5 +76,8 @@ def onPluginStart():
         SetMemory(0x661694, Add, 30343168),# units:Staredit Availability Flags  index:191    from 0 To 463
         SetMemory(0x6616B0, Add, 131072),# units:Staredit Availability Flags  index:205    from 32 To 34
         SetMemory(0x6616B4, Add, 2),# units:Staredit Availability Flags  index:206    from 32 To 34
+        SetMemory(0x6574F4, Add, -256),# weapons:Maximum Range  index:33    from 256 To 0
+        SetMemory(0x6569B0, Add, -4096),# weapons:Attack Angle  index:33    from 16 To 0
+        SetMemory(0x656384, Add, -100),# techdata:Energy Required  index:2    from 100 To 0
     ])
 

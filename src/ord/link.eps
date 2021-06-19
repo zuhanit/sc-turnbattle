@@ -1,0 +1,15 @@
+import player_folder.player;
+import ord.order;
+
+function link(actionObject: order.Action, playerObject: player.Player) {
+    if (playerObject.firstAction == 0) {
+        playerObject.firstAction = actionObject;
+    }
+    if (playerObject.lastAction == 0) {
+        playerObject.lastAction = actionObject;
+    } else {
+        const lastAction = order.Action.cast(playerObject.lastAction);
+        lastAction.next = actionObject;
+        playerObject.lastAction = actionObject;
+    }
+}
